@@ -18,8 +18,6 @@ package com.greglturnquist.hackingspringboot.classic;
 
 import java.util.List;
 
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 // tag::code[]

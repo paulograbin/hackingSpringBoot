@@ -90,21 +90,19 @@ class CartItem {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof CartItem))
+        if (o == null || getClass() != o.getClass())
             return false;
         CartItem cartItem = (CartItem) o;
-        return quantity == cartItem.quantity && Objects.equals(id, cartItem.id) && Objects.equals(cart, cartItem.cart)
-                && Objects.equals(item, cartItem.item);
+        return quantity == cartItem.quantity && Objects.equals(item, cartItem.item);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, cart, item, quantity);
+        return Objects.hash(item, quantity);
     }
 
     @Override
     public String toString() {
-
         String cartId = Optional.ofNullable(this.cart).map(Cart::getId).orElse("NA");
         Integer itemId = Optional.ofNullable(this.item).map(Item::getId).orElse(-1);
 

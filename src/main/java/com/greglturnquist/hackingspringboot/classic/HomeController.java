@@ -23,30 +23,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author Greg Turnquist
  */
 // tag::1[]
-@Controller // <1>
+@Controller
 public class HomeController {
 
-    private ItemRepository itemRepository;
-    private CartRepository cartRepository;
     private InventoryService inventoryService;
 
-    public HomeController(ItemRepository itemRepository, CartRepository cartRepository,
-                          InventoryService inventoryService) {
-        this.itemRepository = itemRepository;
-        this.cartRepository = cartRepository;
+    public HomeController(InventoryService inventoryService) {
         this.inventoryService = inventoryService;
     }
     // end::1[]
 
+    // tag::2[]
     @GetMapping
-    String home(Model model) {
-        // tag::2[]
+    String home(Model model) { // <1>
         model.addAttribute("items", //
                 this.inventoryService.getInventory());
         model.addAttribute("cart", //
@@ -54,8 +48,8 @@ public class HomeController {
                         .orElseGet(() -> new Cart("My Cart")));
 
         return "home";
-        // end::2[]
     }
+    // end::2[]
 
     @PostMapping("/add/{id}")
     String addToCart(@PathVariable Integer id) {
@@ -80,7 +74,4 @@ public class HomeController {
         this.inventoryService.deleteItem(id);
         return "redirect:/";
     }
-
-
-    // end::search[]
 }

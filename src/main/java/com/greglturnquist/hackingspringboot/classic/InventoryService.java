@@ -16,9 +16,7 @@
 
 package com.greglturnquist.hackingspringboot.classic;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -33,8 +31,7 @@ class InventoryService {
 
     private CartRepository cartRepository;
 
-    InventoryService(ItemRepository repository, //
-                     CartRepository cartRepository) {
+    InventoryService(ItemRepository repository, CartRepository cartRepository) {
         this.itemRepository = repository;
         this.cartRepository = cartRepository;
     }
@@ -55,9 +52,7 @@ class InventoryService {
         this.itemRepository.deleteById(id);
     }
 
-    // tag::logging[]
     Cart addItemToCart(String cartId, Integer itemId) {
-
         Cart cart = this.cartRepository.findById(cartId) //
                 .orElseGet(() -> new Cart("My Cart")); // <3>
 
@@ -77,25 +72,18 @@ class InventoryService {
 
         return this.cartRepository.save(cart);
     }
-    // end::logging[]
 
     Cart removeOneFromCart(String cartId, Integer itemId) {
 
-        Cart cart = this.cartRepository.findById("My Cart") //
+        Cart cart = this.cartRepository.findById(cartId) //
                 .orElseGet(() -> new Cart("My Cart")); // <3>
 
         cart.getCartItems().stream() //
                 .filter(cartItem -> cartItem.getItem().getId().equals(itemId)) //
                 .findAny() //
-                .ifPresent(cartItem -> {
-                    cartItem.decrement();
-                });
+                .ifPresent(CartItem::decrement);
 
-        List<CartItem> updatedCartItems = cart.getCartItems().stream() //
-                .filter(cartItem -> cartItem.getQuantity() > 0) //
-                .collect(Collectors.toList());
-
-        cart.setCartItems(updatedCartItems);
+        cart.getCartItems().removeIf(cartItem -> cartItem.getQuantity() <= 0);
 
         return this.cartRepository.save(cart);
     }

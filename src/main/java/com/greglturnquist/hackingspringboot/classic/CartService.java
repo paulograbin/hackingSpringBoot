@@ -37,7 +37,7 @@ class CartService {
     Cart addToCart(String cartId, Integer itemId) { // <3>
 
         Cart cart = this.cartRepository.findById(cartId) //
-                .orElseGet(() -> new Cart(cartId));
+                .orElseGet(() -> new Cart("My Cart")); // <3>
 
         cart.getCartItems().stream() //
                 .filter(cartItem -> cartItem.getItem().getId().equals(itemId)) //
@@ -47,7 +47,7 @@ class CartService {
                     return cart;
                 }) //
                 .orElseGet(() -> {
-                    Item item = this.itemRepository.findById(itemId) //
+                    Item item = this.itemRepository.findById(itemId)
                             .orElseThrow(() -> new IllegalStateException("Can't seem to find Item type " + itemId));
                     cart.getCartItems().add(new CartItem(item, cart));
                     return cart;
