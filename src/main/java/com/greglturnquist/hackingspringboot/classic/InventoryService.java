@@ -16,12 +16,10 @@
 
 package com.greglturnquist.hackingspringboot.classic;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.stereotype.Service;
 
 /**
@@ -31,61 +29,75 @@ import org.springframework.stereotype.Service;
 @Service
 class InventoryService {
 
-    private ItemRepository repository;
-    private ItemByExampleRepository exampleRepository;
+    private ItemRepository itemRepository;
+
+    private CartRepository cartRepository;
 
     InventoryService(ItemRepository repository, //
-                     ItemByExampleRepository exampleRepository) {
-        this.repository = repository;
-        this.exampleRepository = exampleRepository;
+                     CartRepository cartRepository) {
+        this.itemRepository = repository;
+        this.cartRepository = cartRepository;
     }
 
-    List<Item> getItems() {
-        // imagine calling a remote service!
-        return Collections.emptyList();
+    public Optional<Cart> getCart(String cartId) {
+        return this.cartRepository.findById(cartId);
     }
 
-    // tag::code-2[]
-    Iterable<Item> search(String partialName, String partialDescription, boolean useAnd) {
-        if (partialName != null) {
-            if (partialDescription != null) {
-                if (useAnd) {
-                    return repository //
-                            .findByNameContainingAndDescriptionContainingAllIgnoreCase( //
-                                    partialName, partialDescription);
-                } else {
-                    return repository.findByNameContainingOrDescriptionContainingAllIgnoreCase( //
-                            partialName, partialDescription);
-                }
-            } else {
-                return repository.findByNameContaining(partialName);
-            }
-        } else {
-            if (partialDescription != null) {
-                return repository.findByDescriptionContainingIgnoreCase(partialDescription);
-            } else {
-                return repository.findAll();
-            }
-        }
+    public Iterable<Item> getInventory() {
+        return this.itemRepository.findAll();
     }
-    // end::code-2[]
 
-    // tag::code-3[]
-    Iterable<Item> searchByExample(String name, String description, boolean useAnd) {
-        Item item = new Item(name, description, 0.0); // <1>
-
-        ExampleMatcher matcher = (useAnd // <2>
-                ? ExampleMatcher.matchingAll() //
-                : ExampleMatcher.matchingAny()) //
-                .withStringMatcher(StringMatcher.CONTAINING) // <3>
-                .withIgnoreCase() // <4>
-                .withIgnorePaths("price"); // <5>
-
-        Example<Item> probe = Example.of(item, matcher); // <6>
-
-        return exampleRepository.findAll(probe); // <7>
+    Item saveItem(Item newItem) {
+        return this.itemRepository.save(newItem);
     }
-    // end::code-3[]
 
+    void deleteItem(Integer id) {
+        this.itemRepository.deleteById(id);
+    }
+
+    // tag::logging[]
+    Cart addItemToCart(String cartId, Integer itemId) {
+
+        Cart cart = this.cartRepository.findById(cartId) //
+                .orElseGet(() -> new Cart("My Cart")); // <3>
+
+        cart.getCartItems().stream() //
+                .filter(cartItem -> cartItem.getItem().getId().equals(itemId)) //
+                .findAny() //
+                .map(cartItem -> {
+                    cartItem.increment();
+                    return cart;
+                }) //
+                .orElseGet(() -> {
+                    Item item = this.itemRepository.findById(itemId)
+                            .orElseThrow(() -> new IllegalStateException("Can't seem to find Item type " + itemId));
+                    cart.getCartItems().add(new CartItem(item, cart));
+                    return cart;
+                });
+
+        return this.cartRepository.save(cart);
+    }
+    // end::logging[]
+
+    Cart removeOneFromCart(String cartId, Integer itemId) {
+
+        Cart cart = this.cartRepository.findById("My Cart") //
+                .orElseGet(() -> new Cart("My Cart")); // <3>
+
+        cart.getCartItems().stream() //
+                .filter(cartItem -> cartItem.getItem().getId().equals(itemId)) //
+                .findAny() //
+                .ifPresent(cartItem -> {
+                    cartItem.decrement();
+                });
+
+        List<CartItem> updatedCartItems = cart.getCartItems().stream() //
+                .filter(cartItem -> cartItem.getQuantity() > 0) //
+                .collect(Collectors.toList());
+
+        cart.setCartItems(updatedCartItems);
+
+        return this.cartRepository.save(cart);
+    }
 }
 // end::code[]

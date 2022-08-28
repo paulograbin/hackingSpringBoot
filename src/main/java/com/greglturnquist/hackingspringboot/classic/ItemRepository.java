@@ -18,21 +18,22 @@ package com.greglturnquist.hackingspringboot.classic;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 // tag::code[]
-public interface ItemRepository extends CrudRepository<Item, String> {
+public interface ItemRepository extends CrudRepository<Item, Integer> {
 
     List<Item> findByNameContaining(String partialName);
     // end::code[]
 
     // tag::code-2[]
-    @Query("select i from Item i where i.name = ?1 and i.price = ?2")
-    List<Item> findItemsForCustomerMonthlyReport(String name, int price);
+    @Query("{ 'name' : ?0, 'age' :  }")
+    List<Item> findItemsForCustomerMonthlyReport();
 
-    @Query("select i from Item i order by i.price")
-    List<Item> findSortedStuffForWeeklyReport();
+    @Query("{ 'name' : 'TV tray', 'age' : }")
+    List<Item> findSortedStuffForWeeklyReport(Sort sort);
     // end::code-2[]
 
     // tag::code-3[]

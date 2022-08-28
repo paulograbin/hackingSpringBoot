@@ -44,71 +44,43 @@ public class HomeController {
     }
     // end::1[]
 
-    // tag::2[]
     @GetMapping
-    String home(Model model) { // <1>
+    String home(Model model) {
+        // tag::2[]
         model.addAttribute("items", //
-                this.itemRepository.findAll()); // <3>
+                this.inventoryService.getInventory());
         model.addAttribute("cart", //
-                this.cartRepository.findById("My Cart") // <4>
+                this.inventoryService.getCart("My Cart") //
                         .orElseGet(() -> new Cart("My Cart")));
 
-        this.itemRepository //
-                .findAll() //
-                .forEach(System.out::println);
         return "home";
+        // end::2[]
     }
-    // end::2[]
 
-    // tag::3[]
     @PostMapping("/add/{id}")
-    // <1>
-    String addToCart(@PathVariable String id) { // <2>
-        Cart cart = this.cartRepository.findById("My Cart") //
-                .orElseGet(() -> new Cart("My Cart")); // <3>
-
-        cart.getCartItems().stream() //
-                .filter(cartItem -> cartItem.getItem().getId().equals(id)) //
-                .findAny() //
-                .map(cartItem -> {
-                    cartItem.increment();
-                    return cart;
-                }) //
-                .orElseGet(() -> {
-                    Item item = this.itemRepository.findById(id) //
-                            .orElseThrow(() -> //
-                                    new IllegalStateException("Can't seem to find Item type " + id));
-                    cart.getCartItems().add(new CartItem(item, cart));
-                    return cart;
-                });
-
-        this.cartRepository.save(cart);
-
+    String addToCart(@PathVariable Integer id) {
+        this.inventoryService.addItemToCart("My Cart", id);
         return "redirect:/";
     }
-    // end::3[]
+
+    @DeleteMapping("/remove/{id}")
+    String removeFromCart(@PathVariable Integer id) {
+        this.inventoryService.removeOneFromCart("My Cart", id);
+        return "redirect:/";
+    }
 
     @PostMapping
     String createItem(@RequestBody Item newItem) {
-        this.itemRepository.save(newItem);
+        this.inventoryService.saveItem(newItem);
         return "redirect:/";
     }
 
     @DeleteMapping("/delete/{id}")
-    String deleteItem(@PathVariable String id) {
-        this.itemRepository.deleteById(id);
+    String deleteItem(@PathVariable Integer id) {
+        this.inventoryService.deleteItem(id);
         return "redirect:/";
     }
 
-    // tag::search[]
-    @GetMapping("/search") // <1>
-    String search( //
-                   @RequestParam(required = false) String name, // <2>
-                   @RequestParam(required = false) String description, //
-                   @RequestParam boolean useAnd, //
-                   Model model) {
-        model.addAttribute("results", inventoryService.searchByExample(name, description, useAnd)); // <3>
-        return "home"; // <4>
-    }
+
     // end::search[]
 }
