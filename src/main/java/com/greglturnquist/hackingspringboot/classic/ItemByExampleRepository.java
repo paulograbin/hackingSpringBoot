@@ -13,25 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.greglturnquist.hackingspringboot.classic;
 
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.QueryByExampleExecutor;
 
 /**
  * @author Greg Turnquist
  */
 // tag::code[]
-@Component
-public class TemplateDatabaseLoader {
+public interface ItemByExampleRepository extends CrudRepository<Item, Long>, QueryByExampleExecutor<Item> {
 
-    @Bean
-    CommandLineRunner initialize(ItemRepository repository) {
-        return args -> {
-            repository.save(new Item("Alf alarm clock", "kids clock", 19.99));
-            repository.save(new Item("Smurf TV tray", "kids TV tray", 24.99));
-        };
-    }
 }
 // end::code[]

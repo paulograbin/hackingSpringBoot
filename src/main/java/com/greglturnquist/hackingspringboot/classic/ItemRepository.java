@@ -13,13 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.greglturnquist.hackingspringboot.classic;
 
-// tag::code[]
+import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-public interface ItemRepository extends CrudRepository<Item, Integer> {
+// tag::code[]
+public interface ItemRepository extends CrudRepository<Item, String> {
 
+    List<Item> findByNameContaining(String partialName);
+    // end::code[]
+
+    // tag::code-2[]
+    @Query("select i from Item i where i.name = ?1 and i.price = ?2")
+    List<Item> findItemsForCustomerMonthlyReport(String name, int price);
+
+    @Query("select i from Item i order by i.price")
+    List<Item> findSortedStuffForWeeklyReport();
+    // end::code-2[]
+
+    // tag::code-3[]
+    // search by name
+    List<Item> findByNameContainingIgnoreCase(String partialName);
+
+    // search by description
+    List<Item> findByDescriptionContainingIgnoreCase(String partialName);
+
+    // search by name AND description
+    List<Item> findByNameContainingAndDescriptionContainingAllIgnoreCase(String partialName, String partialDesc);
+
+    // search by name OR description
+    List<Item> findByNameContainingOrDescriptionContainingAllIgnoreCase(String partialName, String partialDesc);
+    // end::code-3[]
 }
-// end::code[]
