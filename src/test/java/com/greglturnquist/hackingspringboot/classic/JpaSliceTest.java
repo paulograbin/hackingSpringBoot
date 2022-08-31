@@ -1,5 +1,6 @@
 package com.greglturnquist.hackingspringboot.classic;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -11,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 // tag::code[]
 @DataJpaTest // <1>
+@Disabled
 public class JpaSliceTest {
 
     @Autowired ItemRepository repository; // <2>

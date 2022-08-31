@@ -1,5 +1,6 @@
 package com.greglturnquist.hackingspringboot.classic;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -16,6 +17,7 @@ import static org.springframework.http.MediaType.TEXT_HTML;
 // tag::code[]
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT) // <1>
 @AutoConfigureWebTestClient // <2>
+@Disabled
 public class LoadingWebSiteIntegrationTest {
 
     @Autowired

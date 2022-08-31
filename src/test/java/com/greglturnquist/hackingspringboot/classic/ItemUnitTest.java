@@ -1,5 +1,6 @@
 package com.greglturnquist.hackingspringboot.classic;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -8,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Greg Turnquist
  */
 // tag::code[]
+@Disabled
 class ItemUnitTest {
 
     @Test // <1>

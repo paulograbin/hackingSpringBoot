@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
  */
 // tag::code[]
 @WebMvcTest(HomeController.class) // <1>
+@Disabled
 public class HomeControllerSliceTest {
 
     private WebTestClient client;
