@@ -36,7 +36,7 @@ class InventoryServiceUnitTest { // <2>
     void setUp() {
         // Define test data <2>
         Item sampleItem = new Item(1, "TV tray", "Alf TV tray", 19.99);
-        CartItem sampleCartItem = new CartItem(sampleItem, null);
+        CartItem sampleCartItem = new CartItem(sampleItem);
         Cart sampleCart = new Cart("My Cart", Collections.singletonList(sampleCartItem));
         sampleCartItem.setCart(sampleCart);
 

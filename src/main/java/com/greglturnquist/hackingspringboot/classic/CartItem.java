@@ -38,9 +38,8 @@ class CartItem {
 
     protected CartItem() {}
 
-    CartItem(Item item, Cart cart) {
+    CartItem(Item item) {
         this.item = item;
-        this.cart = cart;
         this.quantity = 1;
     }
 
@@ -90,15 +89,16 @@ class CartItem {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (o == null || getClass() != o.getClass())
+        if (!(o instanceof CartItem))
             return false;
         CartItem cartItem = (CartItem) o;
-        return quantity == cartItem.quantity && Objects.equals(item, cartItem.item);
+        return quantity == cartItem.quantity && Objects.equals(id, cartItem.id) && Objects.equals(cart, cartItem.cart)
+                && Objects.equals(item, cartItem.item);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(item, quantity);
+        return Objects.hash(id, cart, item, quantity);
     }
 
     @Override

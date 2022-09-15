@@ -100,4 +100,5 @@ public class Item {
         return "Item{" + "id='" + id + '\'' + ", name='" + name + '\'' + ", description='" + description + '\'' + ", price="
                 + price + '}';
     }
+
 }
