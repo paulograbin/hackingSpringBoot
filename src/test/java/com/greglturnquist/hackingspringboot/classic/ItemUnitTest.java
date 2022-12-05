@@ -1,5 +1,6 @@
 package com.greglturnquist.hackingspringboot.classic;
 
+import com.greglturnquist.hackingspringboot.classic.models.Item;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 

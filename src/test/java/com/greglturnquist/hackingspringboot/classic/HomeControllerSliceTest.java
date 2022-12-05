@@ -1,11 +1,7 @@
 package com.greglturnquist.hackingspringboot.classic;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-import java.util.Arrays;
-import java.util.Optional;
-
+import com.greglturnquist.hackingspringboot.classic.models.Cart;
+import com.greglturnquist.hackingspringboot.classic.models.Item;
 import com.greglturnquist.hackingspringboot.classic.web.HomeController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -16,6 +12,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
+
+import java.util.Arrays;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 
 @WebMvcTest(HomeController.class)

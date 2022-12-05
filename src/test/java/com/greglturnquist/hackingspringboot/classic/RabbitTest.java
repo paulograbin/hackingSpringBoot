@@ -1,6 +1,7 @@
 package com.greglturnquist.hackingspringboot.classic;
 
 
+import com.greglturnquist.hackingspringboot.classic.models.Item;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
