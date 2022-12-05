@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package com.greglturnquist.hackingspringboot.classic;
+package com.greglturnquist.hackingspringboot.classic.web;
 
-import java.net.URI;
-import java.util.Optional;
-
+import com.greglturnquist.hackingspringboot.classic.ItemRepository;
+import com.greglturnquist.hackingspringboot.classic.models.Item;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,9 +26,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * @author Greg Turnquist
- */
+import java.net.URI;
+import java.util.Optional;
+
+
 @RestController
 public class ApiItemController {
 
@@ -54,14 +54,11 @@ public class ApiItemController {
     ResponseEntity<?> addNewItem(@RequestBody Item item) {
         Item savedItem = this.repository.save(item);
 
-        return ResponseEntity.created(URI.create("/api/items/" + //
-                savedItem.getId())).body(savedItem);
+        return ResponseEntity.created(URI.create("/api/items/" + savedItem.getId())).body(savedItem);
     }
 
     @PutMapping("/api/items/{id}")
-    public ResponseEntity<?> updateItem( //
-                                         @RequestBody Item item, @PathVariable Integer id) {
-
+    public ResponseEntity<?> updateItem(@RequestBody Item item, @PathVariable Integer id) {
         Item newItem = new Item(id, item.getName(), item.getDescription(), item.getPrice());
 
         this.repository.save(newItem);

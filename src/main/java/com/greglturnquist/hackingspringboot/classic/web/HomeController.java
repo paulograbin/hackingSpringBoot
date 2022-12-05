@@ -1,8 +1,8 @@
 package com.greglturnquist.hackingspringboot.classic.web;
 
-import com.greglturnquist.hackingspringboot.classic.Cart;
 import com.greglturnquist.hackingspringboot.classic.InventoryService;
-import com.greglturnquist.hackingspringboot.classic.Item;
+import com.greglturnquist.hackingspringboot.classic.models.Cart;
+import com.greglturnquist.hackingspringboot.classic.models.Item;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
