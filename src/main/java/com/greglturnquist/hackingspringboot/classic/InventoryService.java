@@ -1,22 +1,8 @@
-/*
- * Copyright 2019 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.greglturnquist.hackingspringboot.classic;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -34,6 +20,14 @@ class InventoryService {
     InventoryService(ItemRepository repository, CartRepository cartRepository) {
         this.itemRepository = repository;
         this.cartRepository = cartRepository;
+    }
+
+    public Iterable<Cart> getAllCarts() {
+        return this.cartRepository.findAll();
+    }
+
+    public Cart newCart() {
+        return this.cartRepository.save(new Cart("cart"));
     }
 
     public Optional<Cart> getCart(String cartId) {
@@ -64,9 +58,13 @@ class InventoryService {
                     return cart;
                 }) //
                 .orElseGet(() -> {
-                    Item item = this.itemRepository.findById(itemId)
-                            .orElseThrow(() -> new IllegalStateException("Can't seem to find Item type " + itemId));
-                    cart.getCartItems().add(new CartItem(item, cart));
+                    this.itemRepository.findById(itemId) //
+                            .map(item -> new CartItem(item)) //
+                            .map(cartItem -> {
+                                cart.getCartItems().add(cartItem);
+                                return cart;
+                            }) //
+                            .orElseGet(() -> cart);
                     return cart;
                 });
 
@@ -81,9 +79,15 @@ class InventoryService {
         cart.getCartItems().stream() //
                 .filter(cartItem -> cartItem.getItem().getId().equals(itemId)) //
                 .findAny() //
-                .ifPresent(CartItem::decrement);
+                .ifPresent(cartItem -> {
+                    cartItem.decrement();
+                });
 
-        cart.getCartItems().removeIf(cartItem -> cartItem.getQuantity() <= 0);
+        List<CartItem> updatedCartItems = cart.getCartItems().stream() //
+                .filter(cartItem -> cartItem.getQuantity() > 0) //
+                .collect(Collectors.toList());
+
+        cart.setCartItems(updatedCartItems);
 
         return this.cartRepository.save(cart);
     }

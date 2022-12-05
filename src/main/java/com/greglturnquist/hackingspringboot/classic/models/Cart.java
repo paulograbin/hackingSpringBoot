@@ -1,40 +1,25 @@
-/*
- * Copyright 2019 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package com.greglturnquist.hackingspringboot.classic;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+package com.greglturnquist.hackingspringboot.classic.models;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-/**
- * @author Greg Turnquist
- */
-// tag::code[]
+
 @Entity
-class Cart {
+public class Cart {
 
-    private @Id String id;
-    private @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true) List<CartItem> cartItems;
+    @Id
+    private String id;
 
-    protected Cart() {}
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItem> cartItems;
+
+    protected Cart() {
+    }
 
     public Cart(String id) {
         this(id, new ArrayList<>());
@@ -44,7 +29,7 @@ class Cart {
         this.id = id;
         this.cartItems = cartItems;
     }
-    // end::code[]
+
 
     public String getId() {
         return id;

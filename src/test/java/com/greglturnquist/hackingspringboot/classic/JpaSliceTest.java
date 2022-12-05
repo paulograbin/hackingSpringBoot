@@ -1,5 +1,6 @@
 package com.greglturnquist.hackingspringboot.classic;
 
+import com.greglturnquist.hackingspringboot.classic.models.Item;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,19 +8,16 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * @author Greg Turnquist
- */
-// tag::code[]
-@DataJpaTest // <1>
+
+@DataJpaTest
 @Disabled
 public class JpaSliceTest {
 
-    @Autowired ItemRepository repository; // <2>
+    @Autowired ItemRepository repository;
 
-    @Test // <3>
+    @Test
     void itemRepositorySavesItems() {
-        Item sampleItem = new Item( //
+        Item sampleItem = new Item(
                 "name", "description", 1.99);
 
         Item savedItem = repository.save(sampleItem);
@@ -30,4 +28,3 @@ public class JpaSliceTest {
         assertThat(savedItem.getPrice()).isEqualTo(1.99);
     }
 }
-// end::code[]

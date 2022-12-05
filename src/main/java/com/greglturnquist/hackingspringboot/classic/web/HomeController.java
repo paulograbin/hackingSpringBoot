@@ -1,21 +1,8 @@
-/*
- * Copyright 2019 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+package com.greglturnquist.hackingspringboot.classic.web;
 
-package com.greglturnquist.hackingspringboot.classic;
-
+import com.greglturnquist.hackingspringboot.classic.InventoryService;
+import com.greglturnquist.hackingspringboot.classic.models.Cart;
+import com.greglturnquist.hackingspringboot.classic.models.Item;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,32 +11,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-/**
- * @author Greg Turnquist
- */
-// tag::1[]
+
 @Controller
 public class HomeController {
 
-    private InventoryService inventoryService;
+    private final InventoryService inventoryService;
 
     public HomeController(InventoryService inventoryService) {
         this.inventoryService = inventoryService;
     }
-    // end::1[]
 
-    // tag::2[]
     @GetMapping
-    String home(Model model) { // <1>
-        model.addAttribute("items", //
-                this.inventoryService.getInventory());
-        model.addAttribute("cart", //
-                this.inventoryService.getCart("My Cart") //
-                        .orElseGet(() -> new Cart("My Cart")));
+    String home(Model model) {
+        Iterable<Item> items = this.inventoryService.getInventory();
+        model.addAttribute("items", items);
+
+        Cart cart = this.inventoryService.getCart("My Cart")
+                .orElseGet(() -> new Cart("My Cart"));
+        model.addAttribute("cart", cart);
 
         return "home";
     }
-    // end::2[]
 
     @PostMapping("/add/{id}")
     String addToCart(@PathVariable Integer id) {

@@ -11,29 +11,24 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.TEXT_HTML;
 
-/**
- * @author Greg Turnquist
- */
-// tag::code[]
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT) // <1>
-@AutoConfigureWebTestClient // <2>
+
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient
 @Disabled
 public class LoadingWebSiteIntegrationTest {
 
     @Autowired
-    WebTestClient client; // <3>
+    WebTestClient client;
 
     @Test
-        // <4>
     void test() {
-        client.get().uri("/").exchange() //
-                .expectStatus().isOk() //
-                .expectHeader().contentTypeCompatibleWith(TEXT_HTML) //
-                .expectBody(String.class) //
+        client.get().uri("/").exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentTypeCompatibleWith(TEXT_HTML)
+                .expectBody(String.class)
                 .consumeWith(exchangeResult -> {
-                    assertThat(exchangeResult.getResponseBody()) //
+                    assertThat(exchangeResult.getResponseBody())
                             .contains("<form method=\"post\" action=\"/add");
                 });
     }
 }
-// end::code[]

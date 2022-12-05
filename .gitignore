@@ -2,6 +2,8 @@
 *.class
 target/*
 
+!.mvn/**
+
 # Log file
 *.log
 
