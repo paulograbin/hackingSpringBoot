@@ -13,28 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.greglturnquist.hackingspringboot.classic;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+package com.greglturnquist.hackingspringboot.classic.models;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-/**
- * @author Greg Turnquist
- */
-// tag::code[]
+
 @Entity
-class Cart {
+public class Cart {
 
-    private @Id String id;
-    private @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true) List<CartItem> cartItems;
+    @Id
+    private String id;
 
-    protected Cart() {}
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItem> cartItems;
+
+    protected Cart() {
+    }
 
     public Cart(String id) {
         this(id, new ArrayList<>());
@@ -44,7 +44,7 @@ class Cart {
         this.id = id;
         this.cartItems = cartItems;
     }
-    // end::code[]
+
 
     public String getId() {
         return id;

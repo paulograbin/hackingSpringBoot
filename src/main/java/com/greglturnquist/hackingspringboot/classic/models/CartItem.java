@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.greglturnquist.hackingspringboot.classic;
+package com.greglturnquist.hackingspringboot.classic.models;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -24,26 +24,30 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-/**
- * @author Greg Turnquist
- */
-// tag::code[]
-@Entity
-class CartItem {
 
-    private @Id @GeneratedValue Integer id;
-    private @ManyToOne(fetch = FetchType.LAZY) Cart cart;
-    private @ManyToOne(fetch = FetchType.LAZY) Item item;
+@Entity
+public class CartItem {
+
+    @Id
+    @GeneratedValue
+    private Integer id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Cart cart;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Item item;
     private int quantity;
 
-    protected CartItem() {}
+    protected CartItem() {
+    }
 
-    CartItem(Item item) {
+    public CartItem(Item item) {
         this.item = item;
         this.quantity = 1;
     }
 
-    // end::code[]
+
 
     public void increment() {
         this.quantity++;
