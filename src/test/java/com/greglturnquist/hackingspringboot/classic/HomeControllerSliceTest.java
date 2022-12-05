@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import java.util.Arrays;
 import java.util.Optional;
 
+import com.greglturnquist.hackingspringboot.classic.web.HomeController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -16,42 +17,38 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 
-/**
- * @author Greg Turnquist
- */
-// tag::code[]
-@WebMvcTest(HomeController.class) // <1>
+
+@WebMvcTest(HomeController.class)
 @Disabled
 public class HomeControllerSliceTest {
 
     private WebTestClient client;
 
-    @MockBean // <2>
+    @MockBean
     InventoryService inventoryService;
 
     @BeforeEach
     void setUp(@Autowired MockMvc mockMvc) {
-        this.client = MockMvcWebTestClient.bindTo(mockMvc).build(); // <3>
+        this.client = MockMvcWebTestClient.bindTo(mockMvc).build();
     }
 
     @Test
     void homePage() {
-        when(inventoryService.getInventory()).thenReturn(Arrays.asList( //
-                new Item(1, "name1", "desc1", 1.99), //
-                new Item(2, "name2", "desc2", 9.99) //
+        when(inventoryService.getInventory()).thenReturn(Arrays.asList(
+                new Item(1, "name1", "desc1", 1.99),
+                new Item(2, "name2", "desc2", 9.99)
         ));
-        when(inventoryService.getCart("My Cart")) //
+        when(inventoryService.getCart("My Cart"))
                 .thenReturn(Optional.of(new Cart("My Cart")));
 
-        client.get().uri("/").exchange() //
-                .expectStatus().isOk() //
-                .expectBody(String.class) //
+        client.get().uri("/").exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
                 .consumeWith(exchangeResult -> {
-                    assertThat( //
+                    assertThat(
                             exchangeResult.getResponseBody()).contains("action=\"/add/1\"");
-                    assertThat( //
+                    assertThat(
                             exchangeResult.getResponseBody()).contains("action=\"/add/2\"");
                 });
     }
 }
-// end::code[]
