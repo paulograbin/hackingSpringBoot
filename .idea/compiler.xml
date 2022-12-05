@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="hackingSpringBoot" />
         <module name="hacking-spring-boot-ch2-classic" />
       </profile>
     </annotationProcessing>
@@ -13,6 +14,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="hacking-spring-boot-ch2-classic" options="-parameters" />
+      <module name="hackingSpringBoot" options="-parameters" />
     </option>
   </component>
 </project>
