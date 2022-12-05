@@ -1,5 +1,6 @@
-package com.greglturnquist.hackingspringboot.classic;
+package com.greglturnquist.hackingspringboot.classic.messaging;
 
+import com.greglturnquist.hackingspringboot.classic.models.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
