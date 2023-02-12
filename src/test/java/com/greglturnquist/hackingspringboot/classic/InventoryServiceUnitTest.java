@@ -3,6 +3,8 @@ package com.greglturnquist.hackingspringboot.classic;
 import com.greglturnquist.hackingspringboot.classic.models.Cart;
 import com.greglturnquist.hackingspringboot.classic.models.CartItem;
 import com.greglturnquist.hackingspringboot.classic.models.Item;
+import com.greglturnquist.hackingspringboot.classic.repositories.CartRepository;
+import com.greglturnquist.hackingspringboot.classic.repositories.ItemRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

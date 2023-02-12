@@ -1,6 +1,7 @@
 package com.greglturnquist.hackingspringboot.classic;
 
 import com.greglturnquist.hackingspringboot.classic.models.Item;
+import com.greglturnquist.hackingspringboot.classic.repositories.ItemRepository;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Disabled
 public class JpaSliceTest {
 
-    @Autowired ItemRepository repository;
+    @Autowired
+    ItemRepository repository;
 
     @Test
     void itemRepositorySavesItems() {

@@ -16,7 +16,7 @@
 
 package com.greglturnquist.hackingspringboot.classic.web;
 
-import com.greglturnquist.hackingspringboot.classic.ItemRepository;
+import com.greglturnquist.hackingspringboot.classic.repositories.ItemRepository;
 import com.greglturnquist.hackingspringboot.classic.models.Item;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
