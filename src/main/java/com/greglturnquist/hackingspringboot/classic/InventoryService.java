@@ -49,23 +49,23 @@ public class InventoryService {
     }
 
     public Cart addItemToCart(String cartId, Integer itemId) {
-        Cart cart = this.cartRepository.findById(cartId) //
-                .orElseGet(() -> new Cart("My Cart")); //
+        Cart cart = this.cartRepository.findById(cartId)
+                .orElseGet(() -> new Cart("My Cart"));
 
-        cart.getCartItems().stream() //
-                .filter(cartItem -> cartItem.getItem().getId().equals(itemId)) //
-                .findAny() //
+        cart.getCartItems().stream()
+                .filter(cartItem -> cartItem.getItem().getId().equals(itemId))
+                .findAny()
                 .map(cartItem -> {
                     cartItem.increment();
                     return cart;
-                }) //
+                })
                 .orElseGet(() -> {
-                    this.itemRepository.findById(itemId) //
-                            .map(item -> new CartItem(item)) //
+                    this.itemRepository.findById(itemId)
+                            .map(item -> new CartItem(item))
                             .map(cartItem -> {
                                 cart.getCartItems().add(cartItem);
                                 return cart;
-                            }) //
+                            })
                             .orElseGet(() -> cart);
                     return cart;
                 });
